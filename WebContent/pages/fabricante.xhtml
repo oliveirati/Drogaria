@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/modeloSistema.xhtml">
+	
+	<ui:define name="menu">
+		<ui:include src="/includes/menuPrincipal.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="formFabricante">
+			<p:dataTable id="tabelaFabricante" emptyMessage="Nenhum Registro encontrado."
+				value="#{MBFabricante.itens}" var="item" paginator="true"
+				paginatorPosition="bottom" rows="10" rowKey="#{item.codigo}"
+				selection="#{MBFabricante.fabricanteSelecionado}" selectionMode="single" >
+				<p:ajax event="rowSelect" listener="#{MBFabricante.onRowSelect}" update="btExcluir, btAlterar" /> 
+				<f:facet name="header">Lista de Fabricantes</f:facet>
+				
+				<p:column headerText="Código" sortBy="#{item.codigo}" >
+					<h:outputText value="#{item.codigo}" />
+				</p:column>
+				<p:column headerText="Descrição" sortBy="#{item.descricao}">
+					<h:outputText value="#{item.descricao}" />
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton value="Incluir" icon="ui-icon-plus" actionListener="#{MBFabricante.prepararInclusaoFabricante}"
+						update=":formIncluirFabricante:pnlIncluirFabricante"
+						oncomplete="PF('dlgIncluirFabricante').show();" />
+					<p:commandButton id="btAlterar" icon="ui-icon-pencil" value="Alterar" actionListener="#{MBFabricante.prepararAlteracaoFabricante}"
+						update=":formAlterarFabricante:pnlAlterarFabricante"
+						oncomplete="PF('dlgAlterarFabricante').show();" disabled="#{MBFabricante.fabricanteSelecionado == null}" />
+					<p:commandButton id="btExcluir" icon="ui-icon-trash" value="Excluir" actionListener="#{MBFabricante.prepararExclusaoFabricante}"
+						update=":formExcluirFabricante:pnlExcluirFabricante"
+						oncomplete="PF('dlgExcluirFabricante').show();" disabled="#{MBFabricante.fabricanteSelecionado == null}" />
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog widgetVar="dlgIncluirFabricante" modal="true"
+			appendTo="@(body)" closable="false" draggable="false"
+			header="Incluir Fabricante" resizable="false">
+			<h:form id="formIncluirFabricante">
+				<h:panelGrid id="pnlIncluirFabricante" columns="2">
+					<p:outputLabel value="Descrição: " />
+					<p:inputText size="30" maxlength="50" value="#{MBFabricante.fabricante.descricao}" />
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Salvar" actionListener="#{MBFabricante.incluirFabricante}"
+						oncomplete="PF('dlgIncluirFabricante').hide();" update=":formFabricante:tabelaFabricante: msgGlobal" />
+					<p:commandButton value="Cancelar" onclick="PF('dlgIncluirFabricante').hide();" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+		<p:dialog widgetVar="dlgAlterarFabricante" modal="true"
+			appendTo="@(body)" closable="false" draggable="false"
+			header="Alterar Fabricante" resizable="false">
+			<h:form id="formAlterarFabricante">
+				<h:panelGrid id="pnlAlterarFabricante" columns="2">
+ 					<p:outputLabel value="Código: " />
+ 					<p:outputLabel value="#{MBFabricante.fabricante.codigo}" />
+					<p:outputLabel value="Descrição: " />
+					<p:inputText size="30" maxlength="50" value="#{MBFabricante.fabricante.descricao}" />
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Confirmar Alteração" actionListener="#{MBFabricante.alterarFabricante}"
+						oncomplete="PF('dlgAlterarFabricante').hide();" update=":formFabricante:tabelaFabricante :msgGlobal" />
+					<p:commandButton value="Cancelar" onclick="PF('dlgAlterarFabricante').hide();" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+		<p:dialog widgetVar="dlgExcluirFabricante" modal="true"
+			appendTo="@(body)" closable="false" draggable="false"
+			header="Excluir Fabricante" resizable="false">
+			<h:form id="formExcluirFabricante">
+				<h:panelGrid id="pnlExcluirFabricante" columns="2">
+					<p:outputLabel value="Código: " />
+					<p:outputLabel value="#{MBFabricante.fabricante.codigo}" />
+					<p:outputLabel value="Descrição: " />
+					<p:outputLabel value="#{MBFabricante.fabricante.descricao}" />
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Confirmar Exclusão" actionListener="#{MBFabricante.excluirFabricante}"
+						oncomplete="PF('dlgExcluirFabricante').hide();" update=":formFabricante:tabelaFabricante :msgGlobal" />
+					<p:commandButton value="Cancelar" onclick="PF('dlgExcluirFabricante').hide();" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+
+</ui:composition>

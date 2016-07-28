@@ -1,0 +1,3 @@
+function validarInclusaoAlteracao(){
+	alert("teste");
+}
