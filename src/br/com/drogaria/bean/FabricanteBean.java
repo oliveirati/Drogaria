@@ -14,6 +14,7 @@ import br.com.drogaria.dao.FabricanteDAO;
 import br.com.drogaria.domain.Fabricante;
 import br.com.drogaria.util.JSFUtil;
 
+@SuppressWarnings("deprecation")
 @ManagedBean(name = "MBFabricante")
 @ViewScoped
 public class FabricanteBean {
